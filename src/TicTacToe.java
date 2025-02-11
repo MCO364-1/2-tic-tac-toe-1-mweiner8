@@ -1,5 +1,4 @@
 public class TicTacToe {
-    public enum Player {X, O, _0}
     private final Player[][] board = new Player[3][3];
     private Player currentPlayerVal = Player.X;
 
@@ -19,11 +18,7 @@ public class TicTacToe {
     public void makeMove(int x, int y){
         if (getPosition(x, y) == null){
             board[x][y] = currentPlayerVal;
-            if (currentPlayerVal.equals(Player.X)){
-                currentPlayerVal = Player.O;
-            } else {
-                currentPlayerVal = Player.X;
-            }
+            switchPlayer();
         }
     }
 
@@ -49,7 +44,7 @@ public class TicTacToe {
                 }
             }
         }
-        return Player._0; //in case it's a tie
+        return Player.TIE; //in case it's a tie
     }
 
     public void newGame(){
@@ -57,6 +52,14 @@ public class TicTacToe {
             for (int j = 0; j < 3; j++) {
                 board[i][j] = null;
             }
+        }
+    }
+
+    public void switchPlayer(){
+        if (currentPlayerVal.equals(Player.X)){
+            currentPlayerVal = Player.O;
+        } else {
+            currentPlayerVal = Player.X;
         }
     }
 }

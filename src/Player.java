@@ -1,0 +1,1 @@
+public enum Player { X, O, TIE}

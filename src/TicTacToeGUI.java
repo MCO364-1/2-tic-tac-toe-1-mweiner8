@@ -3,14 +3,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class TicTacToeGUI extends JFrame {
-    TicTacToe model = new TicTacToe();
+    private final TicTacToe model;
     private int xWins = 0;
     private int oWins = 0;
-    private TicTacToe.Player currentPlayer;
-    private final ArrayList<JButton> clickedButtons = new ArrayList<>();
-    private final Font myFont = new Font("Arial", Font.BOLD, 100);
+    private Player currentPlayer;
+    private final ArrayList<JButton> clickedButtons;
+    private final Font myFont;
 
     public TicTacToeGUI(){
+        model = new TicTacToe();
+        clickedButtons = new ArrayList<>();
+        myFont = new Font("Arial", Font.BOLD, 100);
         setTitle("Tic-Tac-Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
@@ -24,7 +27,7 @@ public class TicTacToeGUI extends JFrame {
 
         JPanel statusPanel = new JPanel(new GridLayout(1,4));
         currentPlayer = model.currentPlayer();
-        JLabel currentPlayerSpot = new JLabel("Current Player: " + currentPlayer);
+        JLabel currentPlayerSpot = new JLabel("Current Player: X");
         statusPanel.add(currentPlayerSpot);
         JLabel xWinsSpot = new JLabel("Wins for X: " + xWins);
         statusPanel.add(xWinsSpot);
@@ -34,7 +37,11 @@ public class TicTacToeGUI extends JFrame {
         newSeries.addActionListener(e -> {
             basicReset();
             currentPlayer = model.currentPlayer();
-            currentPlayerSpot.setText("Current Player: " + currentPlayer);
+            if (currentPlayer == Player.O){
+                model.switchPlayer();
+                currentPlayer = Player.X;
+            }
+            currentPlayerSpot.setText("Current Player: X");
             xWins = 0;
             xWinsSpot.setText("Wins for X: " + xWins);
             oWins = 0;
@@ -50,23 +57,22 @@ public class TicTacToeGUI extends JFrame {
                 grid.add(b);
                 int finalI = i;
                 int finalJ = j;
-                //b.setText("i: " + i + "; j: " + j);
                 b.addActionListener(e -> {
                     try{
                         model.makeMove(finalI, finalJ);
                         b.setFont(myFont);
                         b.setText(currentPlayer.toString());
                         clickedButtons.add(b);
-                        TicTacToe.Player winner = model.getWinner();
-                        if (winner != null && winner != TicTacToe.Player._0){
+                        Player winner = model.getWinner();
+                        if (winner != null && winner != Player.TIE){
                             JOptionPane.showMessageDialog(grid, "Winner: " + winner);
-                            if (winner == TicTacToe.Player.X){
+                            if (winner == Player.X){
                                 xWinsSpot.setText("Wins for X: " + ++xWins);
                             } else {
                                 oWinsSpot.setText("Wins for O: " + ++oWins);
                             }
                             basicReset();
-                        } else if (winner == TicTacToe.Player._0) {
+                        } else if (winner == Player.TIE) {
                             JOptionPane.showMessageDialog(grid, "Who would've thought? A game of tic tac toe ended in a tie!");
                             basicReset();
                         }

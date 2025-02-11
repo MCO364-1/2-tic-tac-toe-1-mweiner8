@@ -6,7 +6,7 @@ class TicTacToeTests {
 
     @Test
     void currentPlayer(){
-        TicTacToe.Player currentPlayer = TicTacToe.Player.X;
+        Player currentPlayer = Player.X;
         assertEquals(currentPlayer, testModel.currentPlayer());
     }
 }
