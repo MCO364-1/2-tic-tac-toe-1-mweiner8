@@ -42,14 +42,14 @@ public class TicTacToe {
                    (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != null)) {
             return board[0][2];
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) { //need to check if there are empty boxes; if there's at least one, the game continues. Otherwise, it's a tie
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == null){
                     return null;
                 }
             }
         }
-        return Player._0;
+        return Player._0; //in case it's a tie
     }
 
     public void newGame(){

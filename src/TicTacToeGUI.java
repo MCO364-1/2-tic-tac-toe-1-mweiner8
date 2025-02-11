@@ -14,6 +14,14 @@ public class TicTacToeGUI extends JFrame {
         setTitle("Tic-Tac-Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
+        setResizable(false); //it's always good to play it safe
+
+        //Found this online to have the window be in the center of the screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - 500) / 2;
+        int y = (screenSize.height - 500) / 2;
+        setLocation(x, y);
+
         JPanel statusPanel = new JPanel(new GridLayout(1,4));
         currentPlayer = model.currentPlayer();
         JLabel currentPlayerSpot = new JLabel("Current Player: " + currentPlayer);
