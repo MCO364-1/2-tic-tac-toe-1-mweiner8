@@ -7,13 +7,15 @@ public class TicTacToeGUI extends JFrame {
     private int xWins = 0;
     private int oWins = 0;
     private Player currentPlayer;
+    private Player firstPlayer;
     private final ArrayList<JButton> clickedButtons;
-    private final Font myFont;
+    private final Font myBigFont;
 
     public TicTacToeGUI(){
         model = new TicTacToe();
         clickedButtons = new ArrayList<>();
-        myFont = new Font("Arial", Font.BOLD, 100);
+        myBigFont = new Font("Arial", Font.BOLD, 100);
+        Font mySmallFont = new Font("Arial", Font.BOLD, 16);
         setTitle("Tic-Tac-Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
@@ -25,15 +27,34 @@ public class TicTacToeGUI extends JFrame {
         int y = (screenSize.height - 500) / 2;
         setLocation(x, y);
 
-        JPanel statusPanel = new JPanel(new GridLayout(1,4));
+        JPanel statusPanel = new JPanel(new GridLayout(1,3, 5, 5));
         currentPlayer = model.currentPlayer();
+        firstPlayer = model.currentPlayer();
         JLabel currentPlayerSpot = new JLabel("Current Player: X");
+        currentPlayerSpot.setFont(mySmallFont);
         statusPanel.add(currentPlayerSpot);
         JLabel xWinsSpot = new JLabel("Wins for X: " + xWins);
+        xWinsSpot.setFont(mySmallFont);
         statusPanel.add(xWinsSpot);
         JLabel oWinsSpot = new JLabel("Wins for O: " + oWins);
+        oWinsSpot.setFont(mySmallFont);
         statusPanel.add(oWinsSpot);
+        add(statusPanel, BorderLayout.NORTH);
+
+        JPanel bottomButtons = new JPanel(new GridLayout(1,2, 5, 5));
+        JButton resetGame = new JButton("Reset Game");
+        resetGame.setFont(mySmallFont);
+        resetGame.addActionListener(e -> {
+            currentPlayer = firstPlayer;
+            if (currentPlayer != model.currentPlayer()){
+                model.switchPlayer();
+            }
+            basicReset();
+            currentPlayerSpot.setText("Current Player: " + currentPlayer);
+        });
+        bottomButtons.add(resetGame);
         JButton newSeries = new JButton("New Series");
+        newSeries.setFont(mySmallFont);
         newSeries.addActionListener(e -> {
             basicReset();
             currentPlayer = model.currentPlayer();
@@ -41,14 +62,16 @@ public class TicTacToeGUI extends JFrame {
                 model.switchPlayer();
                 currentPlayer = Player.X;
             }
+            firstPlayer = model.currentPlayer();
             currentPlayerSpot.setText("Current Player: X");
             xWins = 0;
             xWinsSpot.setText("Wins for X: " + xWins);
             oWins = 0;
             oWinsSpot.setText("Wins for O: " + oWins);
         });
-        statusPanel.add(newSeries);
-        add(statusPanel, BorderLayout.NORTH);
+        bottomButtons.add(newSeries);
+        add(bottomButtons, BorderLayout.SOUTH);
+
         JPanel grid = new JPanel(new GridLayout(3,3,5,5));
         add(grid, BorderLayout.CENTER);
         for (int i = 0; i < 3; i++) {
@@ -60,7 +83,7 @@ public class TicTacToeGUI extends JFrame {
                 b.addActionListener(e -> {
                     try{
                         model.makeMove(finalI, finalJ);
-                        b.setFont(myFont);
+                        b.setFont(myBigFont);
                         b.setText(currentPlayer.toString());
                         clickedButtons.add(b);
                         Player winner = model.getWinner();
