@@ -5,8 +5,6 @@ public class TicTacToe {
     public Player getPosition(int x, int y){
         if (x < 0 || x > 2 || y < 0 || y > 2){
             throw new IndexOutOfBoundsException();
-        } else if (board[x][y] != null) {
-            throw new IllegalStateException("Spot has been already filled");
         }
         return board[x][y];
     }
@@ -19,6 +17,8 @@ public class TicTacToe {
         if (getPosition(x, y) == null){
             board[x][y] = currentPlayerVal;
             switchPlayer();
+        } else {
+            throw new IllegalArgumentException("Spot has been already filled");
         }
     }
 
