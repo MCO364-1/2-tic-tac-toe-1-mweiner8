@@ -8,13 +8,13 @@ public class TicTacToeGUI extends JFrame {
     private int oWins = 0;
     private Player currentPlayer;
     private Player firstPlayer;
-    private final ArrayList<JButton> clickedButtons;
+    private final ArrayList<JButton> clickedButtons; //I need a way to keep track of the buttons, so I can clear them between games
     private final Font myBigFont;
 
     public TicTacToeGUI(){
         model = new TicTacToe();
         clickedButtons = new ArrayList<>();
-        myBigFont = new Font("Arial", Font.BOLD, 100);
+        myBigFont = new Font("Arial", Font.BOLD, 100); //I looked up how to make the letters bigger and saw about this
         Font mySmallFont = new Font("Arial", Font.BOLD, 16);
         setTitle("Tic-Tac-Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,13 +95,15 @@ public class TicTacToeGUI extends JFrame {
                                 oWinsSpot.setText("Wins for O: " + ++oWins);
                             }
                             basicReset();
+                            firstPlayer = model.currentPlayer();
                         } else if (winner == Player.TIE) {
                             JOptionPane.showMessageDialog(grid, "Who would've thought? A game of tic tac toe ended in a tie!");
                             basicReset();
+                            firstPlayer = model.currentPlayer();
                         }
                         currentPlayer = model.currentPlayer();
                         currentPlayerSpot.setText("Current Player: " + currentPlayer);
-                    } catch (Exception ex) {
+                    } catch (IllegalArgumentException ex) {
                         JOptionPane.showMessageDialog(grid, ex.getMessage());
                     }
                 });
