@@ -56,7 +56,7 @@ public class TicTacToeGUI extends JFrame {
             }
             basicReset();
             currentPlayerSpot.setText("Current Player: " + currentPlayer);
-            if (firstPlayer == Player.O){
+            if (!manVsMan && firstPlayer == Player.O){
                 compWent = true;
                 compButton().doClick();
             }
