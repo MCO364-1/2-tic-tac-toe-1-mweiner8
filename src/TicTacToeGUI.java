@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TicTacToeGUI extends JFrame {
     private final TicTacToe model;
@@ -10,6 +11,10 @@ public class TicTacToeGUI extends JFrame {
     private Player firstPlayer;
     private final ArrayList<JButton> clickedButtons; //I need a way to keep track of the buttons, so I can clear them between games
     private final Font myBigFont;
+    private boolean manVsMan = true;
+    private final Random rand = new Random();
+    private final JButton[][] buttons = new JButton[3][3];
+    private boolean compWent = false;
 
     public TicTacToeGUI(){
         model = new TicTacToe();
@@ -51,6 +56,10 @@ public class TicTacToeGUI extends JFrame {
             }
             basicReset();
             currentPlayerSpot.setText("Current Player: " + currentPlayer);
+            if (firstPlayer == Player.O){
+                compWent = true;
+                compButton().doClick();
+            }
         });
         bottomButtons.add(resetGame);
         JButton newSeries = new JButton("New Series");
@@ -77,6 +86,7 @@ public class TicTacToeGUI extends JFrame {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 JButton b = new JButton();
+                buttons[i][j] = b;
                 grid.add(b);
                 int finalI = i;
                 int finalJ = j;
@@ -103,6 +113,11 @@ public class TicTacToeGUI extends JFrame {
                         }
                         currentPlayer = model.currentPlayer();
                         currentPlayerSpot.setText("Current Player: " + currentPlayer);
+                        if (!manVsMan && !compWent){
+                            compWent = true;
+                            compButton().doClick();
+                        }
+                        compWent = false;
                     } catch (IllegalArgumentException ex) {
                         JOptionPane.showMessageDialog(grid, ex.getMessage());
                     }
@@ -111,6 +126,13 @@ public class TicTacToeGUI extends JFrame {
         }
 
         setVisible(true);
+
+        Object[] options = {"Man vs. Man", "Man vs. Machine"};
+        int choice = JOptionPane.showOptionDialog(grid, "How would you like to play", "Tic-Tac-Toe", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+        if (choice == 1){
+            manVsMan = false;
+        }
+
     }
 
     private void basicReset(){
@@ -119,5 +141,15 @@ public class TicTacToeGUI extends JFrame {
             button.setText("");
         }
         clickedButtons.clear();
+    }
+
+    private JButton compButton(){
+        int x;
+        int y;
+        do {
+            x = rand.nextInt(3);
+            y = rand.nextInt(3);
+        } while (model.getPosition(x, y) != null);
+        return buttons[x][y];
     }
 }
